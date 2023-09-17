@@ -1,10 +1,15 @@
 import { movies } from "./getMovies";
 import React, { Component } from 'react'
+//import axios from "axios";
+//import Movies from "./Movies";
 
 export default class Banner extends Component {
 
+
     render() {
-        let movie = movies.results[3]
+
+        let movie = movies.results[0]
+
         return (
             <>
                 {
