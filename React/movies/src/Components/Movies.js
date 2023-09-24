@@ -9,9 +9,11 @@ export default class Movies extends Component {
             hover:'',
             p_arr:[1],
             curPage:1,
-            movies:[]
+            movies:[],
+            favourites:[]
         }
     }
+    //setState is asynchronus
     async componentDidMount() {
 
         const res=await axios.get(`https://api.themoviedb.org/3/movie/popular?api_key=ed98488fed75f98a781e40752074339e&language=en-US&page=${this.state.curPage}`)
@@ -41,25 +43,51 @@ export default class Movies extends Component {
         },this.changeMovies)
     }
     handlePrev=async()=>{
-        if(this.state.curPage!=1){
+        if(this.state.curPage!==1){
             this.setState({
                 curPage:this.state.curPage-1
             },this.changeMovies)
         }
 
     }
-    handleChange=async(value)=>{
-        if(this.state.curPage!=value){
+    handleChange= async(value)=>{
+        if(this.state.curPage!==value){
             this.setState({
                 curPage:value
             },this.changeMovies)
         }
+    }
+    handleFav=(obj)=>{
+
+
+        let oldData=JSON.parse(localStorage.getItem("movies") ||"[]")
+        if(this.state.favourites.includes(obj.id)){
+            oldData=oldData.filter((mov)=>mov.id!==obj.id)
+
+        }
+        else{
+            oldData.push(obj);
+
+        }
+        localStorage.setItem("movies",JSON.stringify(oldData))
+        this.handleFavState()
+
+        //console.log(oldData)
+    }
+    handleFavState=()=>{
+        let oldData=JSON.parse(localStorage.getItem('movies')||"[]")
+        let temp=oldData.map((mov)=>mov.id)
+        this.setState({
+            favourites:[...temp]
+        })
+
     }
     render() {
 
         //let movie = movies.results
 
         return (
+
             <div>
                 <>
                     {
@@ -79,7 +107,11 @@ export default class Movies extends Component {
                                                 <div className="button-wrapper" style={{display:'flex',width:'100%',justifyContent:'center'}}>
                                                     {
                                                         this.state.hover===value.id &&
-                                                        <a className="btn btn-primary movie-button" >Add To Favourites</a>
+                                                        <a className="btn btn-primary movie-button" onClick={()=>{this.handleFav(value)}}>
+                                                            {
+                                                                this.state.favourites.includes(value.id)?"Remove From Favourites":"Add To Favourites"
+                                                            }
+                                                        </a>
                                                     }
                                                 </div>
 
@@ -89,15 +121,17 @@ export default class Movies extends Component {
                                     }
                                 </div>
                                 <div style={{display:'flex' , justifyContent:'center'}}>
-                                    <nav aria-label="Page navigation example">
+
+
+                                    <nav aria-label="...">
                                         <ul className="pagination">
                                             <li className="page-item"><a className="page-link" onClick={this.handlePrev}>Previous</a></li>
+
                                             {
                                                 this.state.p_arr.map((value)=>(
-                                                    <li className="page-item"><a className="page-link" onClick={()=>this.handleChange(value)}>{value}</a></li>
+                                                    <li className="page-item active"><a className="page-link" onClick={()=>this.handleChange(value)}>{value}</a></li>
                                                 ))
                                             }
-
                                             <li className="page-item"><a className="page-link" onClick={this.handleNext}>Next</a></li>
                                         </ul>
                                     </nav>
