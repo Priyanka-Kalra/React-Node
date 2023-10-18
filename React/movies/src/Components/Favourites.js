@@ -7,7 +7,9 @@ class Favourites extends Component {
         this.state={
             genres:[],
             curr_genre:'All Genres',
-            movies:[]
+            movies:[],
+            curr_Text:"",//holds string for movie
+
         }
     }
     componentDidMount() {
@@ -22,7 +24,8 @@ class Favourites extends Component {
 
         this.setState({
             genres:[...temp],
-            movies:[...data]
+            movies:[...data],
+
         })
     }
 
@@ -38,12 +41,12 @@ class Favourites extends Component {
         temp_mov.forEach((mov)=>{
             if(!temp_genre.includes(genreids[mov.genre_ids[0]]))temp_genre.push(genreids[mov.genre_ids[0]])
         })
+
+        localStorage.setItem('movies',JSON.stringify(temp_mov))
         this.setState({
             genres:[...temp_genre],
             movies:[...temp_mov]
         })
-        localStorage.setItem('movies',JSON.stringify(temp_mov))
-
 
     }
     changeGenre= (genre)=>{
@@ -60,6 +63,65 @@ class Favourites extends Component {
             curr_genre:genre
         })
     }
+    searchByText=(e)=>{
+        this.setState({
+            curr_Text:e.target.value
+        })
+
+        let data=JSON.parse(localStorage.getItem('movies'||'[]'))
+        let temp=[]
+        let temp_title=''
+        if(this.state.curr_Text!==''){
+            temp=data.filter((mov)=>{
+                temp_title=mov.original_title.toLowerCase()
+                return temp_title.includes(e.target.value.toLowerCase())
+            })
+        }
+        else{
+            temp=this.state.movies;
+        }
+        this.setState({
+            movies:[...temp],
+        })
+    }
+
+    sortPopularity=()=>{
+        let temp=this.state.movies
+        temp.sort((a,b)=>{
+            return a.popularity-b.popularity
+        })
+        this.setState({
+            movies:[...temp]
+        })
+    }
+    sortPopularityReverse=()=>{
+        let temp=this.state.movies
+        temp.sort((a,b)=>{
+            return b.popularity-a.popularity
+        })
+        this.setState({
+            movies:[...temp]
+        })
+    }
+    sortRating=()=>{
+        let temp=this.state.movies
+        temp.sort((a,b)=>{
+            return a.vote_average-b.vote_average
+        })
+        this.setState({
+            movies:[...temp]
+        })
+    }
+    sortRatingReverse=()=>{
+        let temp=this.state.movies
+        temp.sort((a,b)=>{
+            return b.vote_average-a.vote_average
+        })
+        this.setState({
+            movies:[...temp]
+        })
+    }
+
 
     render() {
         let genreids = {28:'Action',12:'Adventure',16:'Animation',35:'Comedy',80:'Crime',99:'Documentary',18:'Drama',10751:'Family',14:'Fantasy',36:'History',
@@ -86,8 +148,7 @@ class Favourites extends Component {
                             </div>
                             <div className='col-9 favourites-table' >
                                 <div className='row' style={{padding:'2rem'}}>
-                                    <input type='text' className='input-group-text col' placeholder="Search"/>
-                                    <input type='number' className='input-group-text col' placeholder="Rows Count"/>
+                                    <input type='text' className='input-group-text col' placeholder="Search" value={this.state.curr_Text} onChange={this.searchByText}/>
                                 </div>
                                 <div className="row" style={{padding:'2rem'}}>
                                     <table className="table table-bordered table-dark table-hover">
@@ -95,8 +156,8 @@ class Favourites extends Component {
                                         <tr>
                                             <th scope="col">Title</th>
                                             <th scope="col">Genre</th>
-                                            <th scope="col">Popularity</th>
-                                            <th scope="col">Rating</th>
+                                            <th scope="col"><i className="fa-solid fa-caret-up" onClick={this.sortPopularity}/>Popularity<i className="fa-solid fa-caret-up fa-rotate-180" onClick={this.sortPopularityReverse}/></th>
+                                            <th scope="col"><i className="fa-solid fa-caret-up" onClick={this.sortRating}/>Rating<i className="fa-solid fa-caret-up fa-rotate-180" onClick={this.sortRatingReverse}/></th>
                                             <th scope="col"></th>
                                         </tr>
                                         </thead>
@@ -116,17 +177,7 @@ class Favourites extends Component {
                                         </tbody>
                                     </table>
                                 </div>
-                                <div className="row" style={{paddingLeft:'2rem'}}>
-                                    <nav aria-label="Page navigation example">
-                                        <ul className="pagination">
-                                            <li className="page-item"><a className="page-link" href="#">Previous</a></li>
-                                            <li className="page-item"><a className="page-link" href="#">1</a></li>
-                                            <li className="page-item"><a className="page-link" href="#">2</a></li>
-                                            <li className="page-item"><a className="page-link" href="#">3</a></li>
-                                            <li className="page-item"><a className="page-link" href="#">Next</a></li>
-                                        </ul>
-                                    </nav>
-                                </div>
+
                             </div>
                         </div>
 
