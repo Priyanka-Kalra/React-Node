@@ -1,1 +1,1 @@
-Practice Repository for MERN
+Practice Repository for react-node
