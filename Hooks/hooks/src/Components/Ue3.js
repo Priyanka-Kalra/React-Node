@@ -7,7 +7,8 @@ function Ue3 () {
     useEffect(()=>{
         console.log("useEffect");
         document.title=`Button Clicked ${count} times`;
-    },[count])//will only call useeffect for change in count
+    },[count])
+    //componentdidupdate only works
 
     console.log('render')
     return (
