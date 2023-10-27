@@ -1,10 +1,11 @@
 import './App.css';
-import Firestore from "./Components/Firestore";
+import Storage from "./Components/Storage";
+import Authorisation from "./Components/Authorisation";
 
 function App() {
   return (
     <div>
-      <Firestore/>
+        <Storage/>
     </div>
   );
 }
