@@ -6,6 +6,7 @@
     width:27vw;
     margin-top: 5%;
 }
+
 .insta-Logo{
     display: flex;
     width:100%;
@@ -15,4 +16,14 @@
 }
 .insta-Logo img{
     width:15vw;
+}
+@media only screen and (max-width: 700px){
+    .signUpCard{
+        width:60%
+    }
+    .insta-Logo img{
+        width:35%;
+    }
+
+    
 }
