@@ -1,4 +1,5 @@
 import * as React from 'react';
+import {useContext, useState} from "react";
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
@@ -7,9 +8,10 @@ import Typography from '@mui/material/Typography';
 import TextField from '@mui/material/TextField';
 import {makeStyles} from "@mui/styles";
 import './LogIn.css'
-import {Link} from 'react-router-dom'
-import { CarouselProvider, Slider, Slide, ButtonBack, ButtonNext } from 'pure-react-carousel';
+import {Link,useNavigate} from  'react-router-dom';
+import { CarouselProvider, Slider, Slide } from 'pure-react-carousel';
 import 'pure-react-carousel/dist/react-carousel.es.css';
+import {AuthContext} from "../Context/AuthContext";
 
 
 import Insta from '../Assets/Instagram.JPG'
@@ -19,9 +21,19 @@ import img2 from '../Assets/img2.jpg'
 import img3 from '../Assets/img3.jpg'
 import img4 from '../Assets/img4.jpg'
 import img5 from '../Assets/img5.jpg'
+import {database, storage} from "../firebase";
 
 
-export default function LogIn() {
+export default function LogIn(){
+    const [email,setEmail] = useState('');
+    const [password,setPassword] = useState('');
+    const [error,setError] = useState('');
+    const [loading,setLoading] = useState(false)
+
+    const navigate=useNavigate()
+
+    const store=useContext(AuthContext)
+
     const useStyles = makeStyles({
         text1: {
             color: 'grey',
@@ -35,6 +47,29 @@ export default function LogIn() {
         }
     })
     const classes = useStyles();
+    const {logIn}=useContext(AuthContext)
+
+    const handleClick=async()=>{
+
+        try{
+            setError('')
+            setLoading(true)
+            let userObj=await logIn(email,password)
+            setLoading(false)
+            navigate('/')
+
+        }
+        catch (err){
+
+            setError(err);
+            setTimeout(()=>{
+                setError('')
+            },2000);
+            setLoading(false);
+        }
+
+    }
+
     return (
 
         <div className="logInWrapper">
@@ -74,8 +109,8 @@ export default function LogIn() {
 
 
                         <>
-                            <TextField  id="filled-basic" label="Email" variant="filled" fullWidth={true} margin={"dense"} size="small"/>
-                            <TextField  id="filled-basic" label="Password" variant="filled" fullWidth={true} margin={"dense"}  size="small"/>
+                            <TextField  id="filled-basic" label="Email" variant="filled" fullWidth={true} margin={"dense"} size="small" onChange={(e)=>setEmail(e.target.value)}/>
+                            <TextField  id="filled-basic" label="Password" variant="filled" fullWidth={true} margin={"dense"}  size="small" onChange={(e)=>setPassword(e.target.value)}/>
                         </>
 
 
@@ -83,7 +118,7 @@ export default function LogIn() {
 
 
                         <CardActions>
-                            <Button variant="contained" style={{marginTop:'0.5%'}} fullWidth={true} >Sign Up</Button>
+                            <Button variant="contained" style={{marginTop:'0.5%'}} fullWidth={true} onClick={handleClick}>Log In</Button>
                         </CardActions>
 
 
