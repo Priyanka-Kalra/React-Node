@@ -19,19 +19,19 @@
 .fa{
     position: absolute;
     bottom: 10%;
-    left: 10%;
+    left: 5%;
 }
 
 .fa h4{
     margin: 0;
     color: white;
     margin-top: 8%;
-    margin-left: 25%;
+    margin-left: 15%;
 }
 .icon-styling{
     position: absolute;
     bottom: 10%;
-    right: 13%;
+    right: 20%;
 }
 
 .like{
@@ -42,4 +42,42 @@
 .unlike{
     cursor: pointer;
     color: white;
+}
+
+.chat-styling{
+    color: white;
+    position: absolute;
+    bottom: 10%;
+    right: 10%;
+}
+.modal-container{
+    display: flex;
+    height: 100%;
+    width: 100%;
+}
+
+.video-modal{
+    width: 50%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.video-modal video{
+    height: 85vh;
+}
+
+.comment-modal{
+    width: 50%;
+    height: 100%;
+}
+
+.unlike2{
+    color: black;
+    cursor: pointer;
+}
+
+.card1{
+    height: 70vh;
 }
