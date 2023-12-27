@@ -6,12 +6,13 @@ import {BrowserRouter as Router,Routes,Route,Navigate} from "react-router-dom";
 import {AuthProvider,AuthContext } from './Context/AuthContext'
 import {Feed} from "./Components/Feed";
 import {useContext} from "react";
+import Profile from "./Components/Profile";
 
 function PrivateRoute({ element }) {
     const { user } = useContext(AuthContext);
 
     return user ? ( <Route element={element} /> ) :
-        ( <Navigate to="/login" replace /> );
+        ( <Navigate to="/login"  replace /> );
 }
 function App() {
     return (
@@ -23,6 +24,7 @@ function App() {
 
                         <Route path={'/login'} element={<LogIn/>}/>
                         <Route path={'/signUp'} element={<SignUp/>}/>
+                        <Route path={'/profile/:id'} element={<PrivateRoute element={<Profile />} />} />
                         <Route path="/" element={<PrivateRoute element={<Feed />} />} />
 
                     </Routes>
