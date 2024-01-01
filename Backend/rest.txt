@@ -1,0 +1,10 @@
+1. Response should be same irresepective of req platform
+2. Routes should be on the basis of nouns and not verbs eg."/user" and not "/getUser"
+3. Should use HTTP methods on the routes(HTTP methods are verbs like 'get','post','delete',etc.)
+4. Data should be in JSON format
+5. APIs should be stateless
+
+
+Why REST APIs?
+1. 95% use REST APIs
+2. Community Support

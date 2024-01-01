@@ -1,0 +1,10 @@
+Types of Middleware:
+1. Global- app,use() it is because it will get executed no matter the request
+2. Specific- eg. app.get() , it is because it will get executed only during a specific task like get
+
+Benefits:
+1. Error Handling Handling
+2. 404 pages
+3. Logger Functions
+
+
