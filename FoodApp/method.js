@@ -1,11 +1,12 @@
 const express = require('express')
 const app = express()
+const mongoose=require('mongoose')
 app.use(express.json());
 
 app.listen(3000,()=>console.log('Server is listening on port 3000')
 )
 
-//middleware function in post request, data from front->json
+//middlewfare function in post request, data from front->json
 
 //auth/signup page
 const authRoute=express.Router();
@@ -28,3 +29,50 @@ function postAuth(req,res){
     });
 
 }
+
+
+const db_link='mongodb+srv://PriyankaKalra:7ZQVzqqYr7xfJaa@cluster1.vh5jcow.mongodb.net/?retryWrites=true&w=majority'
+mongoose.connect(db_link)
+.then((db)=>{
+    console.log('Db Connected')
+})
+.catch((err)=> console.log(err) )
+
+const userSchema=mongoose.Schema({
+    name:{
+        type:String,
+        required:true
+    },
+    email:{
+        type:String,
+        required:true,
+        unique:true
+    }
+    ,
+    password:{
+        type:String,
+        required:true,
+        minLength:8
+    },
+    confirm_password:{
+        type:String,
+        required:true,
+        min:8
+    }
+})
+
+//model
+const userModel=mongoose.model('userModel',userSchema)
+
+async function createUser(){
+    let user={
+        name:'Sammy',
+        email:'SammyKing@gmail.com',
+        password:'Ice-hockey',
+        confirm_password:'Ice-hockey'
+    }
+
+    let data=await userModel.create(user)
+    console.log(data);
+};
+createUser();
